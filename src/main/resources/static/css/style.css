@@ -1,0 +1,22 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.users_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px 12px;
+    border: 1px solid #999;
+    text-align: center;
+}

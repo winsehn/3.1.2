@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="users_wrapper">
+    <table border="2">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Second Name</th>
+            <th>Years</th>
+            <th>Sex</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <th:block th:if="${editingId == user.id}">
+                <form th:action="@{/users/update}" method="post">
+                    <input type="hidden" name="id" th:value="${user.id}"/>
+                    <td><input type="text" name="name" th:value="${user.name}" required/></td>
+                    <td><input type="text" name="second_name" th:value="${user.secondName}" required/></td>
+                    <td><input type="number" name="years" th:value="${user.age}" min="1" max="127" required/></td>
+                    <td><input type="text" name="sex" th:value="${user.sex}" required/></td>
+                    <td>
+                        <button type="submit">Update</button>
+                    </td>
+                </form>
+            </th:block>
+            <th:block th:if="${editingId != user.id}">
+                <td th:text="${user.getName()}">Name</td>
+                <td th:text="${user.getSecondName()}">Second Name</td>
+                <td th:text="${user.getAge()}">Years</td>
+                <td th:text="${user.getSex()}">Sex</td>
+                <td>
+                    <form th:action="@{/users/delete}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${user.id}"/>
+                        <button type="submit">Delete</button>
+                    </form>
+                    <form th:action="@{/users/edit}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${user.id}"/>
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+            </th:block>
+        </tr>
+        <form th:action="@{/users/create}" method="post">
+            <tr>
+                <td><input type="text" name="name" required>
+                <td><input type="text" name="second_name" required></td>
+                <td><input type="number" name="years" min="1" max="127" required></td>
+                <td><input type="text" name="sex" required></td>
+                <td>
+                    <button type="submit">Add</button>
+                </td>
+        </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
