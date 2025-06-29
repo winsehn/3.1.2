@@ -3,11 +3,13 @@ package web.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UsersRepositoryImpl implements UsersRepository {
@@ -42,5 +44,15 @@ public class UsersRepositoryImpl implements UsersRepository {
     public List<User> getAllUsers() {
         Query query = em.createQuery("FROM User", User.class);
         return query.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> findByUserName(String userName) {
+        return em.createQuery("FROM User u WHERE u.userName = :userName", User.class)
+                .setParameter("userName", userName)
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 }

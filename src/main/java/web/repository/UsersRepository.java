@@ -3,6 +3,7 @@ package web.repository;
 import web.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersRepository {
     void addUser(User user);
@@ -12,4 +13,6 @@ public interface UsersRepository {
     void updateUser(User user);
 
     List<User> getAllUsers();
+
+    Optional<User> findByUserName(String userName);
 }

@@ -6,6 +6,7 @@ import web.model.User;
 import web.repository.UsersRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,5 +36,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return usersRepository.getAllUsers();
+    }
+
+    @Override
+    public Optional<User> findByUserName(String userName){
+        return usersRepository.findByUserName(userName);
     }
 }
