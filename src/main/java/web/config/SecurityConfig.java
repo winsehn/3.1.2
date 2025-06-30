@@ -9,17 +9,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import web.model.Role;
-import web.repository.RoleRepository;
-import web.security.RedirectRoleHandlers.LoginSuccessHandler;
+import web.security.LoginSuccessHandler;
 import web.security.UserDetailsServiceImpl;
+import web.service.RoleService;
 
 import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleRepository roleRepository;
+    public SecurityConfig(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                             auth
                                     .requestMatchers("/css/**").permitAll();
-                            List<Role> roles = roleRepository.findAll();
+                            List<Role> roles = roleService.findAll();
                             for (Role role : roles) {
                                 var roleName = role.getName();
                                 var redirect = role.getRedirect();
@@ -49,12 +53,13 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll())
-                .userDetailsService(userDetailsServiceImpl); ;
+                .userDetailsService(userDetailsServiceImpl);
+        ;
         return http.build();
     }
 
     @Bean
-    public AuthenticationSuccessHandler successHandler(RoleRepository roleRepository) {
-        return new LoginSuccessHandler(roleRepository);
+    public AuthenticationSuccessHandler successHandler(RoleService roleService) {
+        return new LoginSuccessHandler(roleService);
     }
 }

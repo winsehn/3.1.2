@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Guest Page</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 64px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>Guest Page</h1>
+<form th:action="@{/logout}" method="post" class="logout-button">
+    <button type="submit">Выйти</button>
+</form>
+</body>
+</html>

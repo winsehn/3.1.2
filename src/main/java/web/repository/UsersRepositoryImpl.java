@@ -3,9 +3,7 @@ package web.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 
 import java.util.List;
@@ -19,13 +17,11 @@ public class UsersRepositoryImpl implements UsersRepository {
 
 
     @Override
-    @Transactional
     public void addUser(User user) {
         em.persist(user);
     }
 
     @Override
-    @Transactional
     public void deleteUser(Long id) {
         User findUser = em.find(User.class, id);
         if (findUser != null) {
@@ -34,22 +30,24 @@ public class UsersRepositoryImpl implements UsersRepository {
     }
 
     @Override
-    @Transactional
     public void updateUser(User user) {
         em.merge(user);
     }
 
     @Override
-    @Transactional
     public List<User> getAllUsers() {
         Query query = em.createQuery("FROM User", User.class);
         return query.getResultList();
     }
 
     @Override
-    @Transactional
+    public List<User> getAllUsersWithRole() {
+        return em.createQuery("SELECT DISTINCT u FROM User u JOIN FETCH u.roles", User.class).getResultList();
+    }
+
+    @Override
     public Optional<User> findByUserName(String userName) {
-        return em.createQuery("FROM User u WHERE u.userName = :userName", User.class)
+        return em.createQuery("SELECT u FROM User u JOIN FETCH u.roles WHERE u.userName = :userName", User.class)
                 .setParameter("userName", userName)
                 .getResultList()
                 .stream()

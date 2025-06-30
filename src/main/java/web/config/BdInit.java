@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import web.model.User;
-import web.repository.RoleRepository;
-import web.model.Role;
 import web.service.UserService;
 
 import java.util.ArrayList;
@@ -18,16 +16,13 @@ import java.util.Random;
 public class BdInit implements InitializingBean {
     private List<User> users;
     private Random rand = new Random();
-
     private UserService userService;
-    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public BdInit(UserService userService, RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
+    public BdInit(UserService userService) {
         this.userService = userService;
     }
 
@@ -40,21 +35,15 @@ public class BdInit implements InitializingBean {
         admin.setUserName("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
 
-        Role roleUser = new Role("ROLE_USER");
-        roleUser.setRedirect("/user");
-
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        roleAdmin.setRedirect("/admin");
-        roleRepository.save(roleUser);
-        roleRepository.save(roleAdmin);
-
-        admin.getRoles().add(roleAdmin);
-        admin.getRoles().add(roleUser);
-        user.getRoles().add(roleUser);
+        userService.setRoleForUser(admin,"ROLE_ADMIN","/admin");
+        userService.setRoleForUser(admin,"ROLE_USER","/user");
+        userService.setRoleForUser(admin,"ROLE_GUEST","/guest");
+        userService.setRoleForUser(user,"ROLE_USER","/user");
+        userService.setRoleForUser(user,"ROLE_GUEST","/guest");
 
         users = new ArrayList<>();
-        users.add(user);
         users.add(admin);
+        users.add(user);
     }
 
     @Override

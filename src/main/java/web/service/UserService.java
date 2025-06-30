@@ -15,5 +15,9 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+    List<User> getAllUsersWithRole();
+
     Optional<User> findByUserName(String userName);
+
+    void setRoleForUser(User user, String roleName, String redirect);
 }

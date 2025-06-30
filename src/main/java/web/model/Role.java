@@ -26,10 +26,11 @@ public class Role implements GrantedAuthority {
     @Column
     private String redirect;
 
-    @ManyToMany (mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<User>();
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String name) {
         this.name = name;
@@ -71,5 +72,4 @@ public class Role implements GrantedAuthority {
     public void setRedirect(String redirect) {
         this.redirect = redirect;
     }
-
 }

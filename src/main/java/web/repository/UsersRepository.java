@@ -14,5 +14,7 @@ public interface UsersRepository {
 
     List<User> getAllUsers();
 
+    List<User> getAllUsersWithRole();
+
     Optional<User> findByUserName(String userName);
 }

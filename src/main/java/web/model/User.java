@@ -1,6 +1,7 @@
 package web.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,7 +45,7 @@ public class User implements UserDetails {
     @Column(name = "sex")
     private String sex;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -132,12 +133,12 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return id != 0 && id == user.id;
+        return id != null && id.equals(user.id);
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(id);
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
